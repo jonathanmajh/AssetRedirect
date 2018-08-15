@@ -1,0 +1,297 @@
+<!--Initial Release-->
+<!--Use Beautify Extension-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--tag to make IE use its modern rendering engine-->
+    <title>Asset Redirect</title>
+</head>
+
+<body>
+    <p id="title">Asset Redirect</p>
+    <p>Display Related Assets Links by using the Asset Number and SiteID</p>
+    <!--    the input fields are in a table so it aligns better-->
+    <table>
+        <tr>
+            <td id="col1">
+                <p>Site ID:</p>
+            </td>
+            <td id="col2">
+                <!--    drop down menu for site selector        -->
+                <select id="siteName">
+                    <option value="BA">BA: Calgary</option>
+                    <option value="CA">CA: Kankakee</option>
+                    <option value="GA">GA: Wilmington</option>
+                    <option value="GC">GC: Sumas</option>
+                    <option value="GE">GE: Ashcroft</option>
+                    <option value="GH">GH: Hawkesbury</option>
+                    <option value="GI">GI: Madoc</option>
+                    <option value="GK">GK: IG Brampton</option>
+                    <option value="GR">GR: BramCal</option>
+                    <option value="GS">GS: Sylacauga</option>
+                    <option value="GV">GV: Texas/Southwest</option>
+                    <option value="PBM">PBM: Senica/Sloviakia</option>
+                    
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td id="col1">
+                <p>Asset Number:</p>
+            </td>
+
+            <td id="col2">
+                <!--Input box & dropdown for asset number-->
+                <div id="AssetNum"><input type="text" id="assetNum" oninput="buttonEnable()"></div>
+            </td>
+
+            <td id="col4" onclick="toolTip(1)">
+                <!--a tool tip hidden in a question mark-->
+                <div class="help-tip">
+                    <p>Enter Asset Number:<br>e.g., S2100</p>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td id="col1">
+                <p>Generate Links for Asset</p>
+            </td>
+            <td id="col3">
+                <button id="submitNum" disabled=true onclick="genLinks()">Submit</button>
+                <!--    the submit button, defaults to disabled-->
+            </td>
+            <td id="col4" onclick="toolTip(2)">
+                <div class="help-tip">
+                    <p>Press the Button to update the links for new asset number</p>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+
+    <p id="result">Press the ? mark for tips</p>
+    <!--    thing for results output, this text will be filled using javascript below-->
+
+</body>
+
+<script type="application/javascript">
+    var start;
+
+    //this calls the button enable function when the asset number is changed
+
+    function toolTip(tipNum) {
+        //    also show the tool tip written in the results section cause sometimes it does not pop up on ishits
+        if (tipNum == 1) {
+            document.getElementById("result").innerHTML = "<p>Enter Asset Number: e.g., S2100</p>"
+        } else {
+            document.getElementById("result").innerHTML = "<p>Press the Button to update the links for new asset number</p>"
+        }
+    }
+
+    function buttonEnable() { //enable the button when a valid asset number is inputted
+        var patt = new RegExp("[A-Z][0-9]{4}"); //check if input is right format
+        var str = assetNum.value.toUpperCase();
+        var result = patt.test(str);
+        if (result == true && str.length == 5) {
+            document.getElementById("submitNum").disabled = false;
+            console.log("enable");
+            assetNum.value = str;
+        } else {
+            document.getElementById("submitNum").disabled = true;
+            console.log("disable");
+        }
+    }
+
+    function genLinks() { //loops through the assets and output rows in array with the right asset number
+
+        //        http://nscandacmaxapp1.na.iko/maximo/ui/login?mobile=false&event=loadapp&value=createsr&additionalevent=insert&additionaleventvalue=assetnum=H1963
+        //        http://nscandacssrs1/ReportServer?/Maximo/Asset%20Spare%20Parts&paramSiteID=GS&paramAssetNum=C7102
+
+        console.log("generating links");
+        var assetN = assetNum.value;
+        var siteID = siteName.value;
+        var text = "<ul>"; //gonna make a list
+        //add blue link
+        text += "<li id=\"blueLink\"><a href=\"http://nscandacmaxapp1.na.iko/maximo/ui/login?mobile=false&event=loadapp&value=createsr&additionalevent=insert&additionaleventvalue=assetnum=" + assetN + "\">" + "BlueLink" + "</a></li>";
+        //add red link
+        text += "<li id=\"redLink\"><a href=\http://nscandacssrs1/ReportServer?/Maximo/Asset%20Spare%20Parts&paramSiteID=" + siteID + "&paramAssetNum=" + assetN + "\">" + "RedLink" + "</a></li>";
+
+        text += "</ul>";
+        document.getElementById("result").innerHTML = text;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() { //set to siteID equal to the variable in the URL ...?cheese=GK case insensitive
+        //this runs as soon as the site has been loaded
+        var cheese = window.location.search.split('=')[1]; //get siteID
+        var cheeseNum = window.location.search.split('=')[3]; //get assetNum
+        //just in case they arent uppercase
+        siteName.value = cheese.toUpperCase();
+        assetNum.value = cheeseNum.toUpperCase();
+
+        if (window.innerHeight > window.innerWidth) {
+            document.getElementById("result").innerHTML = "This Page is best viewed in landscape mode";
+        }
+        //call function for generating links
+        genLinks();
+    }, false);
+</script>
+    
+<style>
+    /*CSS for formatting stuff*/
+
+    /*CSS for the links add to here when new links are added*/
+
+    #blueLink {
+        border-style: solid;
+        border-width: medium;
+        border-color: blue;
+
+    }
+
+    #redLink {
+        border-style: solid;
+        border-width: medium;
+        border-color: red;
+    }
+
+    /*don't touch below*/
+
+    li {
+        padding: 5px;
+        width: 80%;
+            
+    }
+
+    .p {
+        padding: 0;
+        margin: 0;
+    }
+
+    body {
+        font-family: "Sans-serif";
+        font-size: 2em;
+        display: inline-table;
+        width: 95%;
+    }
+
+    input {
+        font-family: "Sans-serif";
+        font-size: 0.9em;
+        width: 90%;
+    }
+
+    select {
+        font-family: "Sans-serif";
+        font-size: 0.9em;
+        width: 90%;
+    }
+
+    table {
+        vertical-align: top;
+        width: 95%
+    }
+
+    button {
+        font-family: "Sans-serif";
+        font-size: 0.9em;
+    }
+
+    #title {
+        text-align: center;
+        font-size: 2em;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    #col1 {
+        padding-right: 0;
+        width: 40%;
+    }
+
+    #col2 {
+        padding-left: 0%;
+        width: 55%;
+    }
+
+    #col3 {
+        padding-left: 0%;
+        padding-right: 5%;
+        width: 55%;
+        text-align: right;
+    }
+
+    #col4 {
+        padding-left: 0%;
+        width: 5%;
+    }
+
+    .help-tip {
+        position: relative;
+        text-align: center;
+        background-color: #BCDBEA;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 14px;
+        line-height: 60px;
+        cursor: default;
+    }
+
+    .help-tip:before {
+        content: '?';
+        font-weight: bold;
+        font-size: 4em;
+        color: #000;
+
+    }
+
+    .help-tip:hover p {
+        display: block;
+        transform-origin: 0% 0%;
+        -webkit-animation: fadeIn 0.3s ease-in-out;
+        animation: fadeIn 0.3s ease-in-out;
+
+    }
+
+    .help-tip p {
+        display: none;
+        text-align: left;
+        background-color: #1E2021;
+        padding: 10px;
+        width: 200px;
+        position: relative;
+        border-radius: 3px;
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+        right: 290%;
+        top: -25%;
+        color: #FFF;
+        font-size: 1.5em;
+        line-height: 1.4;
+        z-index: 1;
+    }
+
+    .help-tip p:before {
+        position: absolute;
+        content: '';
+        width: 0;
+        height: 0;
+        border: 6px solid transparent;
+        border-bottom-color: #1E2021;
+        right: 10px;
+        top: -12px;
+    }
+
+    .help-tip p:after {
+        width: 100%;
+        height: 40px;
+        content: '';
+        position: absolute;
+        top: -40px;
+        left: 0;
+    }
+</style>
+
+</html>
