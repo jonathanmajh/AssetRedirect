@@ -109,7 +109,7 @@
 
         //        http://nscandacmaxapp1.na.iko/maximo/ui/login?mobile=false&event=loadapp&value=createsr&additionalevent=insert&additionaleventvalue=assetnum=H1963
         //        http://nscandacssrs1/ReportServer?/Maximo/Asset%20Spare%20Parts&paramSiteID=GS&paramAssetNum=C7102
-        //        http://127.0.0.1:53129/AssetRedirect/AssetFinder2.4.html?cheese=GH=&cheeseNum=S2010=&mobile=0
+        //        http://operations.connect.na.local/support/Reliability/ReliabilityShared/Pages/AssetFinder2.aspx/?cheese=GH=&cheeseNum=S2010=&mobile=0
 
         console.log("generating links");
         var assetN = assetNum.value;
@@ -120,7 +120,7 @@
         //add red link
         text += "<li id=\"redLink\"><a href=\"http://nscandacssrs1/ReportServer?/Maximo/Asset%20Spare%20Parts&paramSiteID=" + siteID + "&paramAssetNum=" + assetN + "\">" + "RedLink" + "</a></li>";
         
-        text += "<li id=\"purpleLink\"><a href=\"http://127.0.0.1:53129/AssetRedirect/AssetFinder2.4.html?cheese=" + siteID + "=&cheeseNum=" + assetN + "=&mobile=0\">" + "PurpleLink" + "</a></li>";
+        text += "<li id=\"purpleLink\"><a href=\"http://operations.connect.na.local/support/Reliability/ReliabilityShared/Pages/AssetFinder2.aspx/?cheese=" + siteID + "=&cheeseNum=" + assetN + "=&mobile=0\">" + "PurpleLink" + "</a></li>";
 
         text += "</ul>";
         document.getElementById("result").innerHTML = text;
