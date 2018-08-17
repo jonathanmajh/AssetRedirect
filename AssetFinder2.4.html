@@ -302,14 +302,23 @@
         }
         select.appendChild(fragment); //now add everything to the dropdown at once
         console.log("Finished loading assets");
+        if (window.location.search.indexOf("cheeseNum") != -1){
+            var cheeseNum = window.location.search.split('=')[3]; //get assetNum
+            console.log(cheeseNum);
+        //just in case they arent uppercase
+            AssetList.value = cheeseNum.toUpperCase();
+        }
     }
 
 
     document.addEventListener('DOMContentLoaded', function() { //set to siteID equal to the variable in the URL ...?cheese=GK case insensitive
         //this runs as soon as the site has been loaded
-        var cheese = window.location.search.split('=')[1];
-        siteID.value = cheese.toUpperCase();
-        //    console.log("onload")
+        var paraURL = window.location.search
+        if (paraURL.indexOf("cheese") != -1){
+                var cheese = window.location.search.split('=')[1];
+                siteID.value = cheese.toUpperCase();
+        }
+
         ChangeSite();
         if (window.innerHeight > window.innerWidth) {
             document.getElementById("result").innerHTML = "This Page is best viewed in landscape mode";

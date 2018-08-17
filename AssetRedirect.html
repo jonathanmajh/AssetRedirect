@@ -109,6 +109,7 @@
 
         //        http://nscandacmaxapp1.na.iko/maximo/ui/login?mobile=false&event=loadapp&value=createsr&additionalevent=insert&additionaleventvalue=assetnum=H1963
         //        http://nscandacssrs1/ReportServer?/Maximo/Asset%20Spare%20Parts&paramSiteID=GS&paramAssetNum=C7102
+        //        http://127.0.0.1:53129/AssetRedirect/AssetFinder2.4.html?cheese=GH=&cheeseNum=S2010=&mobile=0
 
         console.log("generating links");
         var assetN = assetNum.value;
@@ -118,6 +119,8 @@
         text += "<li id=\"blueLink\"><a href=\"http://nscandacmaxapp1.na.iko/maximo/ui/login?mobile=false&event=loadapp&value=createsr&additionalevent=insert&additionaleventvalue=assetnum=" + assetN + "\">" + "BlueLink" + "</a></li>";
         //add red link
         text += "<li id=\"redLink\"><a href=\"http://nscandacssrs1/ReportServer?/Maximo/Asset%20Spare%20Parts&paramSiteID=" + siteID + "&paramAssetNum=" + assetN + "\">" + "RedLink" + "</a></li>";
+        
+        text += "<li id=\"purpleLink\"><a href=\"http://127.0.0.1:53129/AssetRedirect/AssetFinder2.4.html?cheese=" + siteID + "=&cheeseNum=" + assetN + "=&mobile=0\">" + "PurpleLink" + "</a></li>";
 
         text += "</ul>";
         document.getElementById("result").innerHTML = text;
@@ -125,11 +128,15 @@
 
     document.addEventListener('DOMContentLoaded', function() { //set to siteID equal to the variable in the URL ...?cheese=GK case insensitive
         //this runs as soon as the site has been loaded
-        var cheese = window.location.search.split('=')[1]; //get siteID
-        var cheeseNum = window.location.search.split('=')[3]; //get assetNum
-        //just in case they arent uppercase
-        siteName.value = cheese.toUpperCase();
-        assetNum.value = cheeseNum.toUpperCase();
+        var paraURL = window.location.search
+        if (paraURL.indexOf("cheese") != -1){
+                var cheese = paraURL.split('=')[1]; //get siteID
+                siteName.value = cheese.toUpperCase();
+        }
+        if (paraURL.indexOf("cheeseNum") != -1){
+            var cheeseNum = window.location.search.split('=')[3]; //get assetNum
+            assetNum.value = cheeseNum.toUpperCase();
+        }
 
         if (window.innerHeight > window.innerWidth) {
             document.getElementById("result").innerHTML = "This Page is best viewed in landscape mode";
@@ -155,6 +162,12 @@
         border-style: solid;
         border-width: medium;
         border-color: red;
+    }
+    
+    #purpleLink {
+        border-style: solid;
+        border-width: medium;
+        border-color: purple;
     }
 
     /*don't touch below*/
