@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
+    <title>DNA Map</title>
+
+    <style>
+        #map {
+            width: 100%;
+            height: 500px;
+        }
+        a {
+            color: #cc0000;
+        }
+    </style>
+
+</head>
+
+<body>
+    <p id="title">DNA Map</p>
+    <p>Maps of All Manufacturing Sites with DNA Implimented</p>
+    <div id="map"></div>
+    
+    <script>
+        
+        var siteURL =[
+			["IKO Calgary",	"http://operations.connect.na.local/support/Reliability/IKOCalgary/CalgaryAssetDocuments/IKO_CALGARY_DNA.pdf", 51.0157632, -114.0270971],
+			["IKO Kankakee",  "http://operations.connect.na.local/support/Reliability/IKOKankakee/KankakeeAssetDocuments/Kankakee_Plant_Layout.pdf", 41.087923, -87.8753309],
+			["IKO Wilmington",  "http://operations.connect.na.local/support/Reliability/IKOWilmington/PlantAssetDocs/Wilmington_Plant_Layout.pdf", 39.7530151, -75.5001767],
+			["IKO Sumas",  "http://operations.connect.na.local/support/Reliability/IKOSumas/Sumas Asset Documents/Sumas Main Plant Overview.pdf", 48.9939495, -122.2834137],
+//			["IKO Ashcroft",  "http://operations.connect.na.local/support/Reliability/IKOAshcroft/PlantAssetDocs"],
+			["IKO Hawkesbury",  "http://operations.connect.na.local/support/Reliability/IKOHawkesbury/HawkesburyAssetDocuments/Plant Layout.pdf", 50.7299319, -121.2722971],
+//			["IKO Madoc",  "http://operations.connect.na.local/support/Reliability/IKOMadoc/PlantAssetDocs", 44.4985398, -77.5371204],
+			["IKO Southwest",  "http://operations.connect.na.local/support/Reliability/IKOSouthwest/PlantAssetDocs/Plant_Layout.pdf", 32.0350965, -97.0995177],
+			["IKO Slovakia", "http://operations.connect.na.local/support/Reliability/IKOSlovakia/PlantAssetDocs/SE-Level-01.pdf", 48.6670758, 17.3565852],
+			["IG Brampton",  "http://operations.connect.na.local/support/Reliability/IGBrampton/IGBramptonAssetDocuments/IG_Plant_Layout_First_Level.pdf", 43.6936032, -79.7383604],
+			["IKO Sylacauga",  "http://operations.connect.na.local/support/Reliability/IKOSylacauga/SylacaugaAssetDocuments/IKO_Southeast_Plant_Layout.pdf", 33.1648712, -86.307571],
+			["Bramcal",  "http://operations.connect.na.local/support/Reliability/Bramcal/Plant Asset Documents/Plant_Layout.pdf", 44.3520829, -79.6680303],
+        ];
+        var map = L.map('map',{
+//        scrollWheelZoom:false,
+            center: [53.96, -60.88],
+            zoom: 3            
+        });
+        
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        var size = siteURL.length;
+        for (var i = 0; i < size; i++){
+            var customPopup = "<a href=" + siteURL[i][1] + ">" + siteURL[i][0] + "</a>";
+            L.marker([siteURL[i][2], siteURL[i][3]]).bindPopup(customPopup).addTo(map);
+        }
+
+    </script>
+
+</body>
+
+</html>
+

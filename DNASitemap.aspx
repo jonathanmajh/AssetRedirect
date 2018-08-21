@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
+    <title>DNA Map</title>
+
+    <style>
+        body {
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+        body, html {
+            height: 99%;
+        }
+        .container {
+            display: table;
+            width: 100%;
+            height: 100%; /* this will be treated as a Minimum!
+                             It will stretch to fit content */
+        }
+        
+        #map {
+            display:table-cell;
+            height:100%; /* take as much as possible */
+        }
+        p {
+            display:table-row;
+            width:100%; /*scale to fit*/
+            text-align: center;
+        }
+        #title {
+            text-align: center;
+            font-size: 2em;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        .leaflet-popup-tip,
+        .leaflet-popup-content-wrapper {
+            font-size: 2em;
+/*
+            background: #e93434;
+            color: #ffffff;
+*/
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+
+        <p id="title">DNA Map</p>
+        <p>Maps of All Manufacturing Sites with DNA Implimented</p>
+
+        <div id="map"></div>
+    </div>
+    
+    <script>
+        
+        var siteURL =[
+			["IKO Calgary",	"http://operations.connect.na.local/support/Reliability/IKOCalgary/CalgaryAssetDocuments/IKO_CALGARY_DNA.pdf", 51.0157632, -114.0270971], //1600-42nd Ave. S.E. Calgary,Alberta T2G 5B5
+			["IKO Kankakee",  "http://operations.connect.na.local/support/Reliability/IKOKankakee/KankakeeAssetDocuments/Kankakee_Plant_Layout.pdf", 41.087923, -87.8753309], //235 West South Tec Drive, Kankakee, IL. 60901
+			["IKO Wilmington",  "http://operations.connect.na.local/support/Reliability/IKOWilmington/PlantAssetDocs/Wilmington_Plant_Layout.pdf", 39.7530151, -75.5001767], //120 Hay Road Wilmington, DE. 19809
+			["IKO Sumas",  "http://operations.connect.na.local/support/Reliability/IKOSumas/Sumas Asset Documents/Sumas Main Plant Overview.pdf", 48.9939495, -122.2834137], //850 West Front Street, Sumas, WA 98295
+			["IKO Ashcroft (Currently No DNA)",  "http://operations.connect.na.local/support/Reliability/IKOAshcroft/PlantAssetDocs", 50.7453664, -121.2514044], //P.O. Box 1000, Ashcroft, B.C., V0K 1A0
+			["IKO Hawkesbury",  "http://operations.connect.na.local/support/Reliability/IKOHawkesbury/HawkesburyAssetDocuments/Plant Layout.pdf", 45.5955576, -74.5947497], //1451 Spence Avenue Hawkesbury, Ontario K6A 3T4
+			["IKO Madoc (Currently No DNA)",  "http://operations.connect.na.local/support/Reliability/IKOMadoc/PlantAssetDocs", 44.4985398, -77.5371204], //105084 Hwy 7, Madoc, ON K0K 2K0
+			["IKO Southwest",  "http://operations.connect.na.local/support/Reliability/IKOSouthwest/PlantAssetDocs/Plant_Layout.pdf", 32.0350965, -97.0995177], //1001 IKO Way, Hillsboro, TX  76645
+			["IKO Slovakia", "http://operations.connect.na.local/support/Reliability/IKOSlovakia/PlantAssetDocs/SE-Level-01.pdf", 48.6670758, 17.3565852], //Kaplinské Pole 16, 905 01 Senica, Slovakia
+			["IG Brampton",  "http://operations.connect.na.local/support/Reliability/IGBrampton/IGBramptonAssetDocuments/IG_Plant_Layout_First_Level.pdf", 43.6936032, -79.7383604], //87 Orenda Road, Brampton, ON L6W 1V7
+			["IKO Sylacauga",  "http://operations.connect.na.local/support/Reliability/IKOSylacauga/SylacaugaAssetDocuments/IKO_Southeast_Plant_Layout.pdf", 33.1648712, -86.307571], //1708 Sylacauga Fayetteville Highway, Sylacauga, AL 35151
+			["Bramcal",  "http://operations.connect.na.local/support/Reliability/Bramcal/Plant Asset Documents/Plant_Layout.pdf", 44.3520829, -79.6680303], //400 Huronia Road, Barrie, Ontario, L49 8Y9
+            ["Maxi-Mix (Currently No DNA)",  "http://www.maximix.ca", 43.543959, -79.8798467], //8105 Esquesing Line, Milton, ON, L9T 2X9
+            ["CRC Toronto (Currently No DNA)",  "http://www.canroof.com", 43.6558681,-79.334133], //560 Commissioners St., Toronto, Ontario M4M 1A7
+            ["IKO Brampton (Currently No DNA)",  "https://www.iko.com", 43.6925284, -79.7444545], //71 Orenda Road Brampton, Ontario L6W 1V8
+            ["CRC Brampton (Currently No DNA)",  "http://www.canroof.com", 43.6825432, -79.7258757], //309 Rutherford Road South, Brampton, Ontario, L6W 3R4
+            ["IKO Ingersoll (Currently No DNA)",  "https://www.iko.com", 43.0975945,-80.8928448], //355120 35th Line, Ingersoll ON N0J 1J0
+            ["IG High River (Currently No DNA)",  "https://www.iko.com", 50.5695226,-113.8503843], //1400-10th Street S.E., High River AB  T1V 2B9
+            ["IKO Hillsboro (Currently No DNA)",  "https://www.iko.com", 32.0438366,-97.1382884], //1001 IKO Way, Hillsboro, TX 76645 
+            ["Blair Rubber (Currently No DNA)",  "http://blairrubber.com/", 41.027703,-81.8729277], //5020 Enterprise Parkway Seville, OH 44273
+            ["Hyload (Currently No DNA)",  "http://hyload.com/", 41.0017634,-81.7514049], //9976 Rittman Rd, Wadsworth, OH 44281
+            ["IKO PLC (Currently No DNA)",  "http://www.ikogroup.co.uk", 53.584967,-2.7232832], //Appley Lane North, Appley Bridge, Wigan,  WN6 9AB
+            ["IKO PLC [IKO Grangemill (Former Permanite)](Currently No DNA)",  "http://www.ikogroup.co.uk", 53.1137388,-1.6367977], //IKO PLC, Water Lane,Grangemill, Matlock, Derbyshire, DE4 4BW
+            ["Pure Asphalt Company Limited (Currently No DNA)",  "http://www.ikogroup.co.uk", 53.568467,-2.4137798], //Pure Asphalt Company Limited, Burnden Works, Burnden Road, Bolton, Lancashire, BL3 2RD
+            ["IKO Polymeric (Currently No DNA)",  "http://www.ikogroup.co.uk", 53.1679258,-1.3989654], //Coney Green Road, Clay Cross, Chesterfield, S45 9HZ
+            ["IKO Alconbury (Currently No DNA)",  "http://www.ikogroup.co.uk", 52.3794161,-0.2414008],
+            ["Tenco (Currently No DNA)",  "http://www.tenco.nl", 52.4548094,4.8126184], //Touwen \u0026 Co B.V.  Oostzijde 300 1508 ET Zaandam
+            ["IKO Enertherm (Currently No DNA)",  "http://www.enertherm.eu/nl/", 51.6759272,4.5433087], //Wielewaalweg 1, 4791 PD Klundert  Postbus 45, 4780 AA Moerdijk
+            ["IKO NV (Currently No DNA)",  "https://be.iko.com/", 51.2000273,4.362123], //IKO NV, u0027Herbouvillekaai 80, 2020 Antwerp, Belgium
+            ["AWA Produktions GmbH (Currently No DNA)", "http://www.iko.eu/", 50.7370443,7.133369], //Maarstr. 48, Bonn, 53227, Germany
+            ["Meple (Currently No DNA)",  "http://www.meple.com/", 49.3171085,1.0583233],
+            ["IKO Enertherm (Currently No DNA)",  "http://www.enertherm.eu/fr/premiere-en-france/", 45.997945,3.0876591], //Rue Allemagne, 63460 Combronde, Frankrijk
+            //rip hamilton 628 Victoria Ave N, Hamilton, ON L8L 8B3
+        ];
+        var map = L.map('map',{
+//        scrollWheelZoom:false,
+            center: [53.96, -60.88],
+            zoom: 3            
+        });
+
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        var customOptions =
+            {
+            'maxWidth': '500',
+            'className' : 'custom'
+            }
+        
+        var size = siteURL.length;
+        
+        for (var i = 0; i < size; i++){
+            var customPopup = "<a href=" + siteURL[i][1] + ">" + siteURL[i][0] + "</a>";
+            
+            L.marker([siteURL[i][2], siteURL[i][3]]).bindPopup(customPopup, customOptions).addTo(map);
+        }
+
+    </script>
+
+</body>
+
+</html>
+
