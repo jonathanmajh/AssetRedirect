@@ -10,11 +10,13 @@
 
     <style>
         body {
-            overflow-y: hidden;
+/*            hides the scroll bars*/
+            overflow-y: hidden; 
             overflow-x: hidden;
         }
         body, html {
             height: 99%;
+/*            99% because 100 makes the bottom slightly cut off*/
         }
         .container {
             display: table;
@@ -41,7 +43,7 @@
         .leaflet-popup-tip,
         .leaflet-popup-content-wrapper {
             font-size: 2em;
-/*
+/*          double the size of the font so its more visible on mobile devices
             background: #e93434;
             color: #ffffff;
 */
@@ -54,13 +56,13 @@
     <div class="container">
 
         <p id="title">DNA Map</p>
-        <p>Maps of All Manufacturing Sites with DNA Implimented</p>
+        <p>Map of All Manufacturing Sites with DNA Implimented</p>
 
         <div id="map"></div>
     </div>
     
     <script>
-        
+        //create an array with all information, Name, URL to DNA or home page if no DNA, long / lat
         var siteURL =[
 			["IKO Calgary",	"http://operations.connect.na.local/support/Reliability/IKOCalgary/CalgaryAssetDocuments/IKO_CALGARY_DNA.pdf", 51.0157632, -114.0270971], //1600-42nd Ave. S.E. Calgary,Alberta T2G 5B5
 			["IKO Kankakee",  "http://operations.connect.na.local/support/Reliability/IKOKankakee/KankakeeAssetDocuments/Kankakee_Plant_Layout.pdf", 41.087923, -87.8753309], //235 West South Tec Drive, Kankakee, IL. 60901
@@ -98,27 +100,28 @@
         ];
         var map = L.map('map',{
 //        scrollWheelZoom:false,
-            center: [53.96, -60.88],
+            center: [53.96, -60.88], //set default zoom and location
             zoom: 3            
         });
 
 
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        }).addTo(map); //this is the box at the bottom that gives credit, !!DO NOT REMOVE
         
+        //actually probably dont need custom options
         var customOptions =
             {
             'maxWidth': '500',
             'className' : 'custom'
             }
         
-        var size = siteURL.length;
+        var size = siteURL.length; //get number of rows in 2D array
         
         for (var i = 0; i < size; i++){
-            var customPopup = "<a href=" + siteURL[i][1] + ">" + siteURL[i][0] + "</a>";
+            var customPopup = "<a href=" + siteURL[i][1] + ">" + siteURL[i][0] + "</a>"; //text shown in the popup
             
-            L.marker([siteURL[i][2], siteURL[i][3]]).bindPopup(customPopup, customOptions).addTo(map);
+            L.marker([siteURL[i][2], siteURL[i][3]]).bindPopup(customPopup, customOptions).addTo(map); //add marker with long and lat to map
         }
 
     </script>
