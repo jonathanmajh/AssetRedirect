@@ -3,6 +3,7 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
@@ -42,7 +43,7 @@
         }
         .leaflet-popup-tip,
         .leaflet-popup-content-wrapper {
-            font-size: 2em;
+            font-size: 20px;
 /*          double the size of the font so its more visible on mobile devices
             background: #e93434;
             color: #ffffff;
